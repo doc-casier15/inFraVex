@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Dashboard — InfraVex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+  <style>
+    :root { --bg:#FAFAF8;--bg2:#F0F0EC;--surface:#fff;--ink:#0D0D0D;--ink2:#3A3A34;--muted:#8E8E86;--dim:#B8B8B0;
+    --border:#E4E4DE;--border2:#D0D0C8;--accent:#1B4FD8;--accent2:#143FAF;--accent3:#E8B84B;--accent4:#D64040;
+    --radius:14px;--radius-sm:10px;--shadow-sm:0 2px 8px rgba(0,0,0,0.04);--font-display:'Playfair Display',serif;--font-body:'Figtree',sans-serif; }
+  </style>
+</head>
+<body class="dash-body">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar" id="dashSidebar">
+    <div class="dash-sidebar-header">
+      <a href="index.html" class="dash-logo">InfraVex <span class="logo-dot"></span></a>
+      <span class="dash-role-badge member">Member</span>
+    </div>
+    <nav class="dash-nav">
+      <div class="dash-nav-group">
+        <div class="dash-nav-label">Dashboard</div>
+        <button class="dash-nav-item active" data-page="member_overview" onclick="showDashPage('member_overview')">
+          <span class="nav-icon">🏠</span> Overview
+        </button>
+        <button class="dash-nav-item" data-page="member_plan" onclick="showDashPage('member_plan')">
+          <span class="nav-icon">📦</span> My Plan
+        </button>
+        <button class="dash-nav-item" data-page="member_payments" onclick="showDashPage('member_payments')">
+          <span class="nav-icon">💳</span> Payments
+        </button>
+      </div>
+      <div class="dash-nav-group">
+        <div class="dash-nav-label">Support</div>
+        <button class="dash-nav-item" data-page="member_tickets" onclick="showDashPage('member_tickets')">
+          <span class="nav-icon">🎫</span> Support Tickets
+        </button>
+      </div>
+      <div class="dash-nav-group">
+        <div class="dash-nav-label">Account</div>
+        <button class="dash-nav-item" data-page="member_profile" onclick="showDashPage('member_profile')">
+          <span class="nav-icon">👤</span> Profile
+        </button>
+      </div>
+    </nav>
+    <div class="dash-sidebar-footer">
+      <div class="dash-user-info">
+        <div class="dash-user-avatar" id="dashUserAvatar">??</div>
+        <div>
+          <div class="dash-user-name" id="dashUserName">Member</div>
+          <div class="dash-user-email" id="dashUserEmail">—</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+    <header class="dash-header">
+      <div class="dash-header-left">
+        <button class="dash-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <h1 class="dash-header-title" id="dashHeaderTitle">Overview</h1>
+      </div>
+      <div class="dash-header-right">
+        <a href="index.html" class="dash-header-btn">🌐 View Site</a>
+        <button class="dash-header-btn primary" onclick="dashLogout()">🚪 Logout</button>
+      </div>
+    </header>
+
+    <div class="dash-content">
+
+      <!-- ══ OVERVIEW ══ -->
+      <div class="dash-page active" id="member_overview">
+        <h2 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:1.5rem;" id="memberWelcome">Welcome back!</h2>
+        <div class="dash-stats-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon blue">📦</div>
+            <div class="dash-stat-num" id="memberPlanName">—</div>
+            <div class="dash-stat-label">Current Plan</div>
+            <div class="dash-stat-change up" id="memberPlanPrice">—</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon green">💰</div>
+            <div class="dash-stat-num" id="memberTotalSpent">₹0</div>
+            <div class="dash-stat-label">Total Spent</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon gold">🎫</div>
+            <div class="dash-stat-num" id="memberTicketCount">0</div>
+            <div class="dash-stat-label">Open Tickets</div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">Quick Actions</div></div>
+          <div class="dash-card-body" style="display:flex;gap:1rem;flex-wrap:wrap;">
+            <button class="dash-btn accent" onclick="showDashPage('member_plan')">📦 Upgrade Plan</button>
+            <button class="dash-btn outline" onclick="showDashPage('member_tickets')">🎫 New Ticket</button>
+            <button class="dash-btn outline" onclick="showDashPage('member_payments')">💳 Payment History</button>
+            <button class="dash-btn outline" onclick="showDashPage('member_profile')">👤 Edit Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MY PLAN ══ -->
+      <div class="dash-page" id="member_plan">
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:1.5rem;">Choose Your Plan</h3>
+        <div class="plan-cards-row">
+          <div class="plan-card" data-plan="launchpad" onclick="changePlan('launchpad')">
+            <div class="plan-card-name">Launchpad</div>
+            <div class="plan-card-price">₹999<span>/mo</span></div>
+            <ul class="plan-card-features">
+              <li>100 GB Storage</li><li>5 Websites</li><li>Email Marketing (5K/mo)</li>
+              <li>Basic Analytics</li><li>SSL Certificates</li><li>Business Email</li>
+            </ul>
+            <button class="dash-btn outline full">Select Plan</button>
+          </div>
+          <div class="plan-card" data-plan="proscale" onclick="changePlan('proscale')">
+            <div class="plan-card-name">ProScale</div>
+            <div class="plan-card-price">₹3,499<span>/mo</span></div>
+            <ul class="plan-card-features">
+              <li>1 TB Storage</li><li>Unlimited Websites</li><li>Email Marketing (50K/mo)</li>
+              <li>Advanced Analytics + AI</li><li>CDN & Load Balancing</li><li>Priority 24/7 Support</li>
+            </ul>
+            <button class="dash-btn accent full">Select Plan</button>
+          </div>
+          <div class="plan-card" data-plan="inframax" onclick="changePlan('inframax')">
+            <div class="plan-card-name">InfraMax</div>
+            <div class="plan-card-price">₹9,999<span>/mo</span></div>
+            <ul class="plan-card-features">
+              <li>Unlimited Storage</li><li>Dedicated Infrastructure</li><li>White-label Options</li>
+              <li>SLA 99.99% Uptime</li><li>Dedicated Account Mgr</li><li>On-premise Integration</li>
+            </ul>
+            <button class="dash-btn primary full">Select Plan</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PAYMENTS ══ -->
+      <div class="dash-page" id="member_payments">
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Payment History</div>
+            <button class="dash-btn sm accent" onclick="showDashPage('member_plan')">+ New Payment</button>
+          </div>
+          <div class="dash-card-body" style="padding:0;overflow-x:auto;">
+            <table class="dash-table">
+              <thead><tr><th>Date</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+              <tbody id="memberPaymentsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TICKETS ══ -->
+      <div class="dash-page" id="member_tickets">
+        <div class="dash-card" style="margin-bottom:1.5rem;">
+          <div class="dash-card-header"><div class="dash-card-title">Submit New Ticket</div></div>
+          <div class="dash-card-body">
+            <div class="dash-form-row">
+              <div class="dash-form-group"><label>Subject</label><input type="text" id="ticketSubject" placeholder="How can we help?" /></div>
+              <div class="dash-form-group"><label>Priority</label>
+                <select id="ticketPriority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="urgent">Urgent</option></select>
+              </div>
+            </div>
+            <div class="dash-form-group"><label>Message</label><textarea id="ticketMessage" rows="4" placeholder="Describe your issue in detail..."></textarea></div>
+            <button class="dash-btn accent" onclick="submitTicket()">📩 Submit Ticket</button>
+          </div>
+        </div>
+        <h3 style="font-family:var(--font-display);font-size:1.05rem;margin-bottom:1rem;">Your Tickets</h3>
+        <div id="memberTicketsList"></div>
+      </div>
+
+      <!-- ══ PROFILE ══ -->
+      <div class="dash-page" id="member_profile">
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">👤 Personal Information</div></div>
+          <div class="dash-card-body" style="max-width:600px;">
+            <div class="dash-form-row">
+              <div class="dash-form-group"><label>First Name</label><input type="text" id="profileFirstName" /></div>
+              <div class="dash-form-group"><label>Last Name</label><input type="text" id="profileLastName" /></div>
+            </div>
+            <div class="dash-form-group"><label>Email (read-only)</label><input type="email" id="profileEmail" readonly style="opacity:0.6;cursor:not-allowed;" /></div>
+            <div class="dash-form-row">
+              <div class="dash-form-group"><label>Phone</label><input type="tel" id="profilePhone" placeholder="+91 ..." /></div>
+              <div class="dash-form-group"><label>Company</label><input type="text" id="profileCompany" placeholder="Your company" /></div>
+            </div>
+            <button class="dash-btn primary" onclick="saveProfile()">💾 Save Changes</button>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">🔑 Change Password</div></div>
+          <div class="dash-card-body" style="max-width:400px;">
+            <div class="dash-form-group"><label>Current Password</label><input type="password" id="memberCurPass" /></div>
+            <div class="dash-form-group"><label>New Password</label><input type="password" id="memberNewPass" /></div>
+            <button class="dash-btn primary" onclick="changeMemberPassword()">Update Password</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- PAYMENT MODAL -->
+  <div class="dash-modal-overlay" id="paymentModal">
+    <div class="dash-modal" style="width:560px;">
+      <div class="dash-modal-header">
+        <div class="dash-modal-title">💳 Complete Payment</div>
+        <button class="dash-modal-close" onclick="closePaymentModal()">×</button>
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;" id="paymentDesc"></p>
+      <div style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--accent);margin-bottom:1.5rem;" id="paymentAmount">₹0</div>
+
+      <!-- Card Preview -->
+      <div class="payment-card-preview">
+        <div class="payment-card-brand">💳</div>
+        <div class="payment-card-chip"></div>
+        <div class="payment-card-number" id="cardPreviewNumber">•••• •••• •••• ••••</div>
+        <div class="payment-card-bottom">
+          <div><div class="payment-card-label">Card Holder</div><div class="payment-card-value" id="cardPreviewName">YOUR NAME</div></div>
+          <div><div class="payment-card-label">Expires</div><div class="payment-card-value" id="cardPreviewExpiry">MM/YY</div></div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="dash-form-group"><label>Card Number</label><input type="text" id="payCardNumber" placeholder="1234 5678 9012 3456" maxlength="19" /></div>
+      <div class="dash-form-row">
+        <div class="dash-form-group"><label>Expiry</label><input type="text" id="payExpiry" placeholder="MM/YY" maxlength="5" /></div>
+        <div class="dash-form-group"><label>CVV</label><input type="password" id="payCvv" placeholder="•••" maxlength="4" /></div>
+      </div>
+      <div class="dash-form-group"><label>Cardholder Name</label><input type="text" id="payName" placeholder="Name on card" /></div>
+      <button class="dash-btn accent full" id="payBtn" onclick="processPayment()" style="margin-top:0.5rem;padding:14px;">🔒 Pay Securely →</button>
+      <p style="text-align:center;font-size:0.68rem;color:var(--dim);margin-top:1rem;">🔒 Secured with 256-bit SSL encryption. No real charges.</p>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+  <script>
+    // Member auth check
+    const session = getSession();
+    if (!session || session.role !== 'member') {
+      window.location.href = 'index.html';
+    } else {
+      updateDashUserInfo();
+      showDashPage('member_overview');
+    }
+  </script>
+</body>
+</html>

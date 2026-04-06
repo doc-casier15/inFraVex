@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — InfraVex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+  <style>
+    :root { --bg:#FAFAF8;--bg2:#F0F0EC;--surface:#fff;--ink:#0D0D0D;--ink2:#3A3A34;--muted:#8E8E86;--dim:#B8B8B0;
+    --border:#E4E4DE;--border2:#D0D0C8;--accent:#1B4FD8;--accent2:#143FAF;--accent3:#E8B84B;--accent4:#D64040;
+    --radius:14px;--radius-sm:10px;--shadow-sm:0 2px 8px rgba(0,0,0,0.04);--font-display:'Playfair Display',serif;--font-body:'Figtree',sans-serif;
+    --ease:cubic-bezier(0.16,1,0.3,1); }
+  </style>
+</head>
+<body class="dash-body">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar" id="dashSidebar">
+    <div class="dash-sidebar-header">
+      <a href="index.html" class="dash-logo"><img src="logo.png" alt="InfraVex" style="height:28px;" /> InfraVex</a>
+      <span class="dash-role-badge admin">Admin</span>
+    </div>
+    <nav class="dash-nav">
+      <div class="dash-nav-group">
+        <div class="dash-nav-label">Dashboard</div>
+        <button class="dash-nav-item active" data-page="admin_overview" onclick="showDashPage('admin_overview')">
+          <span class="nav-icon">📊</span> Overview
+        </button>
+        <button class="dash-nav-item" data-page="admin_members" onclick="showDashPage('admin_members')">
+          <span class="nav-icon">👥</span> Members
+        </button>
+        <button class="dash-nav-item" data-page="admin_requests" onclick="showDashPage('admin_requests')">
+          <span class="nav-icon">📨</span> Requests
+        </button>
+      </div>
+      <div class="dash-nav-group">
+        <div class="dash-nav-label">Finance</div>
+        <button class="dash-nav-item" data-page="admin_payments" onclick="showDashPage('admin_payments')">
+          <span class="nav-icon">💳</span> Payments
+        </button>
+      </div>
+      <div class="dash-nav-group">
+        <div class="dash-nav-label">Support</div>
+        <button class="dash-nav-item" data-page="admin_tickets" onclick="showDashPage('admin_tickets')">
+          <span class="nav-icon">🎫</span> Tickets
+        </button>
+      </div>
+      <div class="dash-nav-group">
+        <div class="dash-nav-label">System</div>
+        <button class="dash-nav-item" data-page="admin_settings" onclick="showDashPage('admin_settings')">
+          <span class="nav-icon">⚙️</span> Settings
+        </button>
+        <button class="dash-nav-item" data-page="admin_editor" onclick="showDashPage('admin_editor')">
+          <span class="nav-icon">✏️</span> Content Editor
+        </button>
+      </div>
+    </nav>
+    <div class="dash-sidebar-footer">
+      <div class="dash-user-info">
+        <div class="dash-user-avatar" id="dashUserAvatar">AD</div>
+        <div>
+          <div class="dash-user-name" id="dashUserName">Administrator</div>
+          <div class="dash-user-email" id="dashUserEmail">admin@infravex.in</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+    <header class="dash-header">
+      <div class="dash-header-left">
+        <button class="dash-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <h1 class="dash-header-title" id="dashHeaderTitle">Overview</h1>
+      </div>
+      <div class="dash-header-right">
+        <a href="index.html" class="dash-header-btn">🌐 View Site</a>
+        <button class="dash-header-btn primary" onclick="dashLogout()">🚪 Logout</button>
+      </div>
+    </header>
+
+    <div class="dash-content">
+
+      <!-- ══ OVERVIEW ══ -->
+      <div class="dash-page active" id="admin_overview">
+        <div class="dash-stats-row">
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon blue">👥</div>
+            <div class="dash-stat-num" id="adminStatMembers">0</div>
+            <div class="dash-stat-label">Total Members</div>
+            <div class="dash-stat-change up">↑ Active</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon green">💰</div>
+            <div class="dash-stat-num" id="adminStatRevenue">₹0</div>
+            <div class="dash-stat-label">Total Revenue</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon gold">📨</div>
+            <div class="dash-stat-num" id="adminStatRequests">0</div>
+            <div class="dash-stat-label">Contact Requests</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon red">🎫</div>
+            <div class="dash-stat-num" id="adminStatTickets">0</div>
+            <div class="dash-stat-label">Open Tickets</div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">Recent Activity</div></div>
+          <div class="dash-card-body" id="adminRecentActivity"></div>
+        </div>
+      </div>
+
+      <!-- ══ MEMBERS ══ -->
+      <div class="dash-page" id="admin_members">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+          <div class="dash-card-title">All Members (<span id="adminMemberCount">0</span>)</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-body" style="padding:0;overflow-x:auto;">
+            <table class="dash-table">
+              <thead><tr><th>Member</th><th>Plan</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+              <tbody id="adminMembersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ REQUESTS ══ -->
+      <div class="dash-page" id="admin_requests">
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+          <div class="dash-stat-card" style="flex:1;"><div class="dash-stat-num" id="adminContactCount">0</div><div class="dash-stat-label">Contact Forms</div></div>
+          <div class="dash-stat-card" style="flex:1;"><div class="dash-stat-num" id="adminNewsletterCount">0</div><div class="dash-stat-label">Newsletter Subs</div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">📨 Contact Submissions</div></div>
+          <div class="dash-card-body" id="adminContactsList"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">📧 Newsletter Subscribers</div></div>
+          <div class="dash-card-body" id="adminNewsletterList"></div>
+        </div>
+      </div>
+
+      <!-- ══ PAYMENTS ══ -->
+      <div class="dash-page" id="admin_payments">
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+          <div class="dash-stat-card" style="flex:1;"><div class="dash-stat-num" id="adminTotalRevenue">₹0</div><div class="dash-stat-label">Total Revenue</div></div>
+          <div class="dash-stat-card" style="flex:1;"><div class="dash-stat-num" id="adminPaymentCount">0</div><div class="dash-stat-label">Transactions</div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-body" style="padding:0;overflow-x:auto;">
+            <table class="dash-table">
+              <thead><tr><th>Member</th><th>Amount</th><th>Plan</th><th>Method</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="adminPaymentsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CONTENT EDITOR ══ -->
+      <div class="dash-page" id="admin_editor">
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">✏️ Website Content Editor</div><button class="dash-btn sm accent" onclick="saveAllEdits()">💾 Save All</button></div>
+          <div class="dash-card-body">
+            <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.5rem;">Edit any text content across your website. Changes are saved to localStorage and persist on refresh.</p>
+            <div class="dash-form-group"><label>🏠 Hero Title (highlighted word)</label><input type="text" id="edit_hero-title" placeholder="InfraVex" /></div>
+            <div class="dash-form-group"><label>🏠 Hero Subtitle</label><textarea id="edit_hero-subtitle" rows="3" placeholder="Your hero subtitle..."></textarea></div>
+            <div class="dash-form-group"><label>🛠️ Services Section Title</label><input type="text" id="edit_services-title" placeholder="Everything You Need to Dominate Online" /></div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+            <h4 style="font-family:var(--font-display);margin-bottom:1rem;">Custom Sections</h4>
+            <div class="dash-form-group"><label>Section Name</label><input type="text" id="editCustomKey" placeholder="e.g. footer-tagline" /></div>
+            <div class="dash-form-group"><label>Content (HTML allowed)</label><textarea id="editCustomValue" rows="3" placeholder="Enter new content..."></textarea></div>
+            <button class="dash-btn outline" onclick="saveCustomEdit()">+ Add Custom Edit</button>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">📋 Saved Edits</div><button class="dash-btn sm danger" onclick="if(confirm('Clear all content edits?')){localStorage.removeItem('infravex-edits');dashToast('Edits cleared','info');loadEditorPage()}">🗑️ Clear All</button></div>
+          <div class="dash-card-body" id="savedEditsList"></div>
+        </div>
+      </div>
+
+      <!-- ══ TICKETS ══ -->
+      <div class="dash-page" id="admin_tickets">
+        <div style="margin-bottom:1.5rem;"><span class="dash-card-title">Support Tickets</span> <span class="badge pending" id="adminTicketCount">0</span> open</div>
+        <div id="adminTicketsList"></div>
+      </div>
+
+      <!-- ══ SETTINGS ══ -->
+      <div class="dash-page" id="admin_settings">
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">🔑 Change Admin Password</div></div>
+          <div class="dash-card-body" style="max-width:400px;">
+            <div class="dash-form-group"><label>Current Password</label><input type="password" id="adminCurPass" /></div>
+            <div class="dash-form-group"><label>New Password</label><input type="password" id="adminNewPass" /></div>
+            <div class="dash-form-group"><label>Confirm Password</label><input type="password" id="adminConfPass" /></div>
+            <button class="dash-btn primary" onclick="adminChangePassword()">Update Password</button>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">⚠️ Danger Zone</div></div>
+          <div class="dash-card-body">
+            <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">Clear all stored data (members, payments, tickets). This cannot be undone.</p>
+            <button class="dash-btn danger" onclick="if(confirm('Are you sure? This will delete ALL data.')){localStorage.clear();dashToast('All data cleared','info');setTimeout(()=>location.reload(),1000);}">🗑️ Reset All Data</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="dashboard.js"></script>
+  <script>
+    // Admin auth check
+    const session = getSession();
+    if (!session || session.role !== 'admin') {
+      setSession({ role: 'admin', name: 'Administrator', email: 'admin@infravex.in' });
+    }
+    updateDashUserInfo();
+    showDashPage('admin_overview');
+  </script>
+</body>
+</html>
