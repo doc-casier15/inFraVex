@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0D0D0D" />
+  <title>InfraVex — Digital Innovation Beyond Limits</title>
+  <meta name="description"
+    content="InfraVex — Next-gen digital infrastructure, cloud solutions, web development, digital marketing, and cybersecurity for businesses worldwide." />
+  <meta property="og:title" content="InfraVex — Digital Innovation Beyond Limits" />
+  <meta property="og:description"
+    content="Digital marketing, web solutions, cloud storage, and software innovation — all under one powerful platform." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="icon" type="image/x-icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Figtree:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="premium-upgrade.css" />
+</head>
+
+<body>
+
+  <!-- ── ADMIN LOGIN MODAL ── -->
+  <div class="admin-overlay" id="adminOverlay">
+    <div class="admin-login-card">
+      <button class="close-btn" onclick="closeAdminLogin()">×</button>
+      <div class="admin-login-header">
+        <div class="admin-lock">🔐</div>
+        <h3>Admin Panel</h3>
+        <p>Sign in to manage your website content</p>
+      </div>
+      <div class="admin-form-group">
+        <label>Username</label>
+        <input type="text" id="adminUser" placeholder="Enter username" autocomplete="off" />
+      </div>
+      <div class="admin-form-group">
+        <label>Password</label>
+        <input type="password" id="adminPass" placeholder="Enter password" />
+      </div>
+      <button class="admin-login-btn" onclick="handleAdminLogin()">Sign In →</button>
+      <div class="admin-login-error" id="adminError">Invalid credentials. Please try again.</div>
+      <div class="admin-creds-hint">Default: <code>admin</code> / <code>infravex2025</code></div>
+    </div>
+  </div>
+
+  <!-- ── ADMIN TOOLBAR ── -->
+  <div class="admin-toolbar" id="adminToolbar">
+    <div class="admin-toolbar-left">
+      <div class="admin-toolbar-badge"><span class="live-dot"></span> Admin Mode</div>
+      <span class="admin-toolbar-text">Editing as <strong style="color:#fff;">Administrator</strong></span>
+    </div>
+    <div class="admin-toolbar-right">
+      <button class="admin-tb-btn edit-btn" id="editModeBtn" onclick="toggleEditMode()">✏️ Edit Content</button>
+      <button class="admin-tb-btn dash-btn" onclick="openDashboard()">📊 Requests</button>
+      <button class="admin-tb-btn logout-btn" onclick="adminLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- ── VISITOR REQUESTS DASHBOARD ── -->
+  <div class="admin-dashboard-overlay" id="dashboardOverlay">
+    <div class="admin-dashboard">
+      <div class="admin-dash-header">
+        <h3>📊 Visitor Requests</h3>
+        <button class="close-btn" onclick="closeDashboard()"
+          style="position:static;width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+      </div>
+      <div class="admin-dash-tabs">
+        <button class="admin-dash-tab active" onclick="switchDashTab('contacts', this)">📨 Contact Forms</button>
+        <button class="admin-dash-tab" onclick="switchDashTab('newsletters', this)">📧 Newsletter</button>
+      </div>
+      <div class="admin-dash-body" id="dashBody">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── PRELOADER ── -->
+  <div id="preloader">
+    <div class="preloader-logo">Infra<span>Vex</span></div>
+    <div class="preloader-bar-track">
+      <div class="preloader-bar-fill" id="preloaderFill"></div>
+    </div>
+    <div class="preloader-text">Loading Experience...</div>
+  </div>
+
+  <!-- ── SCROLL PROGRESS ── -->
+  <div id="scrollProgress"></div>
+
+  <!-- ── CUSTOM CURSOR ── -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ── TOAST CONTAINER ── -->
+  <div id="toastContainer"></div>
+
+  <!-- ── BACK TO TOP ── -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- ── SCROLL INDICATOR ── -->
+  <div class="scroll-indicator" id="scrollIndicator">
+    <div class="scroll-indicator-mouse">
+      <div class="scroll-indicator-dot"></div>
+    </div>
+    <span class="scroll-indicator-text">Scroll</span>
+  </div>
+
+
+  <!-- ── NAV ── -->
+  <nav id="navbar">
+    <a class="nav-logo" onclick="showPage('home')" style="display:flex;align-items:center;gap:8px;">
+      <img src="logo.png" alt="InfraVex" style="height:32px;width:auto;" />
+      InfraVex
+    </a>
+    <ul class="nav-links">
+      <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
+      <li><button onclick="showPage('services')" id="nav-services">Services</button></li>
+      <li><button onclick="showPage('about')" id="nav-about">About</button></li>
+      <li><button onclick="showPage('contact')" id="nav-contact">Contact</button></li>
+      <li><button onclick="showPage('contact')" class="nav-cta">Get Started</button></li>
+
+      <li><button class="dark-toggle" id="darkToggle">🌙</button></li>
+    </ul>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button onclick="showPage('home'); closeMobile()">Home</button>
+    <button onclick="showPage('services'); closeMobile()">Services</button>
+    <button onclick="showPage('about'); closeMobile()">About</button>
+    <button onclick="showPage('contact'); closeMobile()">Contact</button>
+    <button onclick="showPage('contact'); closeMobile()" style="color:var(--accent);font-weight:700;">Get Started
+      →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+     HOME PAGE
+══════════════════════════════════════════ -->
+  <div id="page-home" class="page active">
+
+    <!-- HERO -->
+    <section id="hero" class="mouse-spotlight">
+      <canvas id="particleCanvas"></canvas>
+      <div class="hero-bg-grid scroll-parallax" data-speed="0.15"></div>
+      <div class="hero-bg-gradient scroll-parallax" data-speed="-0.2"></div>
+
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Next-Gen Digital Infrastructure
+        </div>
+        <h1 class="hero-title">
+          Build the Future<br>with <em id="typingText">InfraVex</em><span class="typing-cursor"></span>
+        </h1>
+        <p class="hero-sub">Digital marketing, web solutions, cloud storage, and software innovation — all under one
+          powerful platform designed for growth.</p>
+        <div class="hero-actions">
+          <button onclick="showPage('contact')" class="btn-primary">Start Your Journey →</button>
+          <button onclick="showPage('services')" class="btn-secondary">Explore Services</button>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-avatars">
+            <div class="trust-avatar">RK</div>
+            <div class="trust-avatar">PS</div>
+            <div class="trust-avatar">AM</div>
+            <div class="trust-avatar">+</div>
+          </div>
+          <p class="trust-text"><strong>500+ businesses</strong> trust InfraVex</p>
+          <span style="color:var(--accent3);font-size:0.85rem;font-weight:600;">★★★★★</span>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div style="position:relative; padding: 28px;">
+          <div class="float-card float-card-1">
+            <div class="float-icon blue">☁️</div>
+            <div>
+              <div class="float-info-title">99.9% Uptime</div>
+              <div class="float-info-sub">SLA Guaranteed</div>
+            </div>
+          </div>
+          <div class="float-card float-card-2">
+            <div class="float-icon gold">⚡</div>
+            <div>
+              <div class="float-info-title">2× Faster</div>
+              <div class="float-info-sub">Avg. delivery speed</div>
+            </div>
+          </div>
+          <div class="hero-card-main">
+            <div class="hero-card-header">
+              <span class="card-title">Performance Overview</span>
+              <span class="card-badge">Live</span>
+            </div>
+            <div class="metrics-grid">
+              <div class="metric-box">
+                <div class="metric-num" id="heroCounter1">0</div>
+                <div class="metric-label">Clients Served</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-num">99.9%</div>
+                <div class="metric-label">Uptime SLA</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-num" id="heroCounter2">0</div>
+                <div class="metric-label">Countries</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-num" id="heroCounter3">0</div>
+                <div class="metric-label">Yrs Innovation</div>
+              </div>
+            </div>
+            <div class="hero-chart" id="heroChart">
+              <div class="chart-bar" style="height:80px;">
+                <div class="chart-bar-fill" style="height:0%;--target-h:45%"></div><span class="chart-label">Q1</span>
+              </div>
+              <div class="chart-bar" style="height:80px;">
+                <div class="chart-bar-fill" style="height:0%;--target-h:60%"></div><span class="chart-label">Q2</span>
+              </div>
+              <div class="chart-bar" style="height:80px;">
+                <div class="chart-bar-fill" style="height:0%;--target-h:52%"></div><span class="chart-label">Q3</span>
+              </div>
+              <div class="chart-bar" style="height:80px;">
+                <div class="chart-bar-fill" style="height:0%;--target-h:78%"></div><span class="chart-label">Q4</span>
+              </div>
+              <div class="chart-bar" style="height:80px;">
+                <div class="chart-bar-fill" style="height:0%;--target-h:65%"></div><span class="chart-label">Q1</span>
+              </div>
+              <div class="chart-bar" style="height:80px;">
+                <div class="chart-bar-fill" style="height:0%;--target-h:88%"></div><span class="chart-label">Q2</span>
+              </div>
+              <div class="chart-bar" style="height:80px;">
+                <div class="chart-bar-fill" style="height:0%;--target-h:95%"></div><span class="chart-label">Now</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span class="marquee-item">Digital Marketing <span class="sep"></span></span>
+        <span class="marquee-item">Web Development <span class="sep"></span></span>
+        <span class="marquee-item">Cloud Storage <span class="sep"></span></span>
+        <span class="marquee-item">Software Solutions <span class="sep"></span></span>
+        <span class="marquee-item">SEO Optimization <span class="sep"></span></span>
+        <span class="marquee-item">UI/UX Design <span class="sep"></span></span>
+        <span class="marquee-item">DevOps & CI/CD <span class="sep"></span></span>
+        <span class="marquee-item">Data Analytics <span class="sep"></span></span>
+        <span class="marquee-item">API Integration <span class="sep"></span></span>
+        <span class="marquee-item">Mobile Apps <span class="sep"></span></span>
+        <span class="marquee-item">Cyber Security <span class="sep"></span></span>
+        <span class="marquee-item">AI Solutions <span class="sep"></span></span>
+        <span class="marquee-item">Digital Marketing <span class="sep"></span></span>
+        <span class="marquee-item">Web Development <span class="sep"></span></span>
+        <span class="marquee-item">Cloud Storage <span class="sep"></span></span>
+        <span class="marquee-item">Software Solutions <span class="sep"></span></span>
+        <span class="marquee-item">SEO Optimization <span class="sep"></span></span>
+        <span class="marquee-item">UI/UX Design <span class="sep"></span></span>
+        <span class="marquee-item">DevOps & CI/CD <span class="sep"></span></span>
+        <span class="marquee-item">Data Analytics <span class="sep"></span></span>
+        <span class="marquee-item">API Integration <span class="sep"></span></span>
+        <span class="marquee-item">Mobile Apps <span class="sep"></span></span>
+        <span class="marquee-item">Cyber Security <span class="sep"></span></span>
+        <span class="marquee-item">AI Solutions <span class="sep"></span></span>
+      </div>
+    </div>
+
+    <!-- SERVICES PREVIEW -->
+    <section id="services-home" class="mouse-spotlight scroll-progress-section">
+      <div class="section-header">
+        <div>
+          <div class="section-tag">Our Services</div>
+          <h2 class="section-title" data-editable="services-title">Everything You Need<br>to Dominate Online</h2>
+        </div>
+        <div>
+          <p class="section-sub" style="margin-top:0;">From brand awareness to full-stack cloud infrastructure —
+            InfraVex has you covered.</p>
+          <button onclick="showPage('services')" class="btn-secondary" style="margin-top:1rem;">View All Services
+            →</button>
+        </div>
+      </div>
+      <div class="services-grid-home">
+        <div class="service-card-home reveal">
+          <div class="service-icon-wrap">📣</div>
+          <div class="service-name">Digital Marketing</div>
+          <p class="service-desc">Performance-driven campaigns across SEO, PPC, social media, and content. We grow your
+            digital footprint with data-backed strategies.</p>
+          <a class="service-arrow-link" onclick="showPage('services')">Learn more →</a>
+        </div>
+        <div class="service-card-home reveal reveal-delay-1">
+          <div class="service-icon-wrap">💻</div>
+          <div class="service-name">Web Solutions</div>
+          <p class="service-desc">Blazing-fast, responsive websites and web apps built with modern frameworks. From
+            landing pages to complex enterprise portals.</p>
+          <a class="service-arrow-link" onclick="showPage('services')">Learn more →</a>
+        </div>
+        <div class="service-card-home reveal reveal-delay-2">
+          <div class="service-icon-wrap">☁️</div>
+          <div class="service-name">Cloud Storage</div>
+          <p class="service-desc">Scalable, secure, and redundant cloud storage solutions. Multi-region backup, instant
+            access, and enterprise-grade encryption.</p>
+          <a class="service-arrow-link" onclick="showPage('services')">Learn more →</a>
+        </div>
+        <div class="service-card-home reveal">
+          <div class="service-icon-wrap">⚙️</div>
+          <div class="service-name">Software Solutions</div>
+          <p class="service-desc">Custom software development tailored to your workflows. ERP systems, SaaS platforms,
+            automation tools, and everything in between.</p>
+          <a class="service-arrow-link" onclick="showPage('services')">Learn more →</a>
+        </div>
+        <div class="service-card-home reveal reveal-delay-1">
+          <div class="service-icon-wrap">📱</div>
+          <div class="service-name">Mobile Applications</div>
+          <p class="service-desc">iOS and Android apps built for scale and performance. Native and cross-platform
+            development with intuitive UX that users love.</p>
+          <a class="service-arrow-link" onclick="showPage('services')">Learn more →</a>
+        </div>
+        <div class="service-card-home reveal reveal-delay-2">
+          <div class="service-icon-wrap">🔐</div>
+          <div class="service-name">Cyber Security</div>
+          <p class="service-desc">Penetration testing, vulnerability assessments, and 24/7 security monitoring. Keep
+            your assets safe in an evolving threat landscape.</p>
+          <a class="service-arrow-link" onclick="showPage('services')">Learn more →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY US -->
+    <section id="why-us" class="scroll-progress-section">
+      <div class="why-grid">
+        <div class="why-visual reveal">
+          <div class="why-main-card">
+            <div class="why-card-header">
+              <span class="why-dot r"></span>
+              <span class="why-dot y"></span>
+              <span class="why-dot g"></span>
+              <span class="why-card-title">infravex.in — Performance Dashboard</span>
+            </div>
+            <div class="why-card-body">
+              <div class="perf-row">
+                <span class="perf-label">Page Speed</span>
+                <div class="perf-bar-track">
+                  <div class="perf-bar-fill" id="bar1" style="width:0%"></div>
+                </div>
+                <span class="perf-val">98/100</span>
+              </div>
+              <div class="perf-row">
+                <span class="perf-label">Uptime SLA</span>
+                <div class="perf-bar-track">
+                  <div class="perf-bar-fill" id="bar2" style="width:0%"></div>
+                </div>
+                <span class="perf-val">99.9%</span>
+              </div>
+              <div class="perf-row">
+                <span class="perf-label">Client ROI</span>
+                <div class="perf-bar-track">
+                  <div class="perf-bar-fill" id="bar3" style="width:0%"></div>
+                </div>
+                <span class="perf-val">3.8×</span>
+              </div>
+              <div class="perf-row">
+                <span class="perf-label">Satisfaction</span>
+                <div class="perf-bar-track">
+                  <div class="perf-bar-fill" id="bar4" style="width:0%"></div>
+                </div>
+                <span class="perf-val">96%</span>
+              </div>
+              <div class="perf-row">
+                <span class="perf-label">Support SLA</span>
+                <div class="perf-bar-track">
+                  <div class="perf-bar-fill" id="bar5" style="width:0%"></div>
+                </div>
+                <span class="perf-val">
+                  < 15min</span>
+              </div>
+            </div>
+          </div>
+          <div class="why-float-stat">
+            <div class="why-float-num">500+</div>
+            <div class="why-float-label">Clients Worldwide</div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="section-tag">Why InfraVex</div>
+          <h2 class="section-title">Infrastructure That<br>Thinks Ahead</h2>
+          <p class="section-sub">We built InfraVex on the belief that every business — from startups to enterprises —
+            deserves world-class digital infrastructure.</p>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <div class="feature-check">✓</div>
+              <div>
+                <div class="feature-title">End-to-End Ownership</div>
+                <div class="feature-desc">From strategy to execution, we own your outcomes fully — no hand-offs, no gaps
+                  in accountability.</div>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">✓</div>
+              <div>
+                <div class="feature-title">Real-Time Analytics Dashboard</div>
+                <div class="feature-desc">Every metric that matters — live performance, storage usage, campaign ROI — in
+                  one unified place.</div>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-check">✓</div>
+              <div>
+                <div class="feature-title">24/7 Dedicated Support</div>
+                <div class="feature-desc">Our engineers are always on. Critical issues are resolved in under 15 minutes,
+                  guaranteed by SLA.</div>
+              </div>
+            </li>
+          </ul>
+          <button onclick="showPage('about')" class="btn-primary">Meet the Team →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section id="process-home" class="mouse-spotlight scroll-progress-section">
+      <div style="text-align:center;">
+        <div class="section-tag">How It Works</div>
+        <h2 class="section-title">From Brief to Live<br>in 4 Simple Steps</h2>
+      </div>
+      <div class="process-steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <div class="step-title">Discovery</div>
+          <p class="step-desc">Deep-dive into your business goals, competitive landscape, and technical requirements to
+            build a clear roadmap.</p>
+        </div>
+        <div class="step reveal reveal-delay-1">
+          <div class="step-num">02</div>
+          <div class="step-title">Strategy</div>
+          <p class="step-desc">Our cross-functional team crafts a bespoke digital strategy with defined KPIs, timelines,
+            and resource allocation.</p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-num">03</div>
+          <div class="step-title">Execute</div>
+          <p class="step-desc">We build, launch, and optimize — running agile sprints with weekly check-ins to keep
+            everything aligned.</p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-num">04</div>
+          <div class="step-title">Grow</div>
+          <p class="step-desc">Post-launch, we continuously analyze data, iterate improvements, and scale your digital
+            presence to new heights.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials-home" class="scroll-progress-section">
+      <div style="text-align:center;">
+        <div class="section-tag">Client Stories</div>
+        <h2 class="section-title">Trusted by Industry Leaders</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial reveal">
+          <div class="quote-mark">"</div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">InfraVex transformed our online presence in under 3 months. Our organic traffic
+            tripled and the cloud migration was seamless. Best digital partner we've ever worked with.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">RK</div>
+            <div>
+              <div class="author-name">Rahul Khanna</div>
+              <div class="author-role">CEO, TechNova India</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial reveal reveal-delay-1">
+          <div class="quote-mark">"</div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">The ProScale cloud plan is incredible value. We went from managing 5 servers to
+            fully managed infra with 99.99% uptime. Their support team is absolutely phenomenal.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">PS</div>
+            <div>
+              <div class="author-name">Priya Sharma</div>
+              <div class="author-role">CTO, FinBridge Solutions</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial reveal reveal-delay-2">
+          <div class="quote-mark">"</div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">From the custom CRM to the PPC campaigns — InfraVex is not a vendor, they're a
+            growth partner. Highly recommend for any scaling startup looking to move fast.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AM</div>
+            <div>
+              <div class="author-name">Arjun Mehta</div>
+              <div class="author-role">Founder, GreenLeaf Commerce</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq-home" class="scroll-progress-section">
+      <div class="faq-grid">
+        <div class="reveal-left">
+          <div class="section-tag">FAQ</div>
+          <h2 class="section-title">Got Questions?<br>We've Got Answers</h2>
+          <p class="section-sub">Everything you need to know about working with InfraVex. Can't find what you're looking
+            for? Reach out to our team.</p>
+          <button onclick="showPage('contact')" class="btn-primary" style="margin-top:1.5rem;">Ask a Question →</button>
+        </div>
+        <div class="faq-list reveal-right">
+          <div class="faq-item active">
+            <button class="faq-question">
+              <span>How quickly can InfraVex deliver results?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Most projects show measurable results within 30–60 days. For digital marketing, we typically achieve
+                2–3× traffic growth within the first quarter.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What industries do you specialize in?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>We work across fintech, e-commerce, SaaS, healthcare, education, and more. Our flexible approach adapts
+                to any industry's unique requirements.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Do you offer ongoing support after launch?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Absolutely. All our plans include 24/7 monitoring and support. Enterprise clients get a dedicated
+                account manager and priority SLA guarantees.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Can I start with one service and add more later?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Yes! Many clients start with web development or marketing and gradually add cloud, security, and
+                software services as they scale.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What makes InfraVex different from other agencies?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>We offer end-to-end ownership — one team handles everything from strategy to execution. No hand-offs,
+                no gaps, and complete transparency.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stats-bar-grid">
+        <div class="stat-item">
+          <div class="stat-number" data-target="500" data-suffix="+">0</div>
+          <div class="stat-label">Clients Worldwide</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="40" data-suffix="+">0</div>
+          <div class="stat-label">Countries Served</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="99" data-suffix=".9%">0</div>
+          <div class="stat-label">Uptime Guaranteed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="15" data-suffix="min">0</div>
+          <div class="stat-label">Avg Response Time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <section id="cta-home" class="scroll-progress-section">
+      <div class="cta-box reveal-scale">
+        <div class="section-tag">Get Started Today</div>
+        <h2 class="section-title">Ready to Accelerate<br>Your Digital Growth?</h2>
+        <p>Join 500+ businesses that trust InfraVex to power their digital infrastructure. Start free, scale fast.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <button onclick="showPage('contact')" class="btn-accent">Book a Free Consultation →</button>
+          <button onclick="showPage('services')" class="btn-secondary">Explore Services</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <div class="newsletter-section">
+      <div class="newsletter-inner">
+        <h3>Stay Ahead of the Curve</h3>
+        <p>Get weekly insights on digital growth, tech trends, and InfraVex updates — straight to your inbox.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Enter your email address..." />
+          <button onclick="handleNewsletter(this)">Subscribe</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="nav-logo" onclick="showPage('home')"
+            style="font-size:1.35rem;cursor:pointer;display:flex;align-items:center;gap:8px;">
+            <img src="logo.png" alt="InfraVex" style="height:28px;width:auto;" /> InfraVex</a>
+          <p>Digital infrastructure reimagined. We help businesses grow through technology, creativity, and relentless
+            execution.</p>
+          <div class="social-links" style="margin-top:1.25rem;">
+            <a href="#" class="social-link">𝕏</a>
+            <a href="#" class="social-link">in</a>
+            <a href="#" class="social-link">▣</a>
+            <a href="#" class="social-link">⌥</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a onclick="showPage('services')">Digital Marketing</a></li>
+            <li><a onclick="showPage('services')">Web Solutions</a></li>
+            <li><a onclick="showPage('services')">Cloud Storage</a></li>
+            <li><a onclick="showPage('services')">Software Dev</a></li>
+            <li><a onclick="showPage('services')">Mobile Apps</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a onclick="showPage('about')">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Press Kit</a></li>
+            <li><a href="#">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Status Page</a></li>
+            <li><a onclick="showPage('contact')">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 InfraVex Technologies. All rights reserved. Made with ♥ in India.</p>
+        <p class="footer-copy">hello@infravex.in &nbsp;|&nbsp; +91-XXXXXXXXXX</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+     SERVICES PAGE
+══════════════════════════════════════════ -->
+  <div id="page-services" class="page">
+
+    <div class="page-hero">
+      <div class="section-tag">Our Services</div>
+      <h1 class="section-title">Digital Solutions Built<br><em style="font-style:italic;color:var(--accent);">for Real
+          Growth</em></h1>
+      <p class="section-sub">From awareness to infrastructure — every service we offer is designed to drive measurable
+        outcomes for your business.</p>
+    </div>
+
+    <div class="page-content">
+      <!-- FULL SERVICES -->
+      <div class="services-full-grid">
+        <div class="service-full-card reveal">
+          <div class="service-full-header">
+            <div class="service-full-icon">📣</div>
+            <div>
+              <div class="service-full-title">Digital Marketing</div>
+              <div class="service-full-tag">Growth & Awareness</div>
+            </div>
+          </div>
+          <p class="service-full-desc">Performance-driven campaigns across SEO, PPC, social media, and content
+            marketing. We use data-backed strategies to grow your brand's digital footprint, increase qualified traffic,
+            and improve conversion rates. From Google Ads to Instagram reels, we manage it all.</p>
+          <div class="service-features-tags">
+            <span class="tag">SEO Audit</span>
+            <span class="tag">PPC Campaigns</span>
+            <span class="tag">Content Strategy</span>
+            <span class="tag">Social Media</span>
+            <span class="tag">Email Marketing</span>
+          </div>
+        </div>
+        <div class="service-full-card reveal reveal-delay-1">
+          <div class="service-full-header">
+            <div class="service-full-icon">💻</div>
+            <div>
+              <div class="service-full-title">Web Solutions</div>
+              <div class="service-full-tag">Design & Development</div>
+            </div>
+          </div>
+          <p class="service-full-desc">Blazing-fast, responsive websites and web apps built with modern frameworks. From
+            landing pages that convert to complex enterprise portals — every pixel is crafted with purpose. We use
+            React, Next.js, Node.js, and more.</p>
+          <div class="service-features-tags">
+            <span class="tag">UI/UX Design</span>
+            <span class="tag">React / Next.js</span>
+            <span class="tag">CMS Integration</span>
+            <span class="tag">E-Commerce</span>
+            <span class="tag">Performance Opt.</span>
+          </div>
+        </div>
+        <div class="service-full-card reveal">
+          <div class="service-full-header">
+            <div class="service-full-icon">☁️</div>
+            <div>
+              <div class="service-full-title">Cloud Storage</div>
+              <div class="service-full-tag">Infrastructure & DevOps</div>
+            </div>
+          </div>
+          <p class="service-full-desc">Scalable, secure, and redundant cloud storage solutions with multi-region backup,
+            instant access, and enterprise-grade encryption. We support AWS, GCP, and Azure environments with automated
+            failover and disaster recovery built-in.</p>
+          <div class="service-features-tags">
+            <span class="tag">AWS / GCP / Azure</span>
+            <span class="tag">Auto-backup</span>
+            <span class="tag">CDN</span>
+            <span class="tag">Encryption</span>
+            <span class="tag">Disaster Recovery</span>
+          </div>
+        </div>
+        <div class="service-full-card reveal reveal-delay-1">
+          <div class="service-full-header">
+            <div class="service-full-icon">⚙️</div>
+            <div>
+              <div class="service-full-title">Software Solutions</div>
+              <div class="service-full-tag">Custom Development</div>
+            </div>
+          </div>
+          <p class="service-full-desc">Custom software development tailored precisely to your workflows. ERP systems,
+            SaaS platforms, automation tools, and process optimization — we build software that makes your team 10× more
+            productive and your business more scalable.</p>
+          <div class="service-features-tags">
+            <span class="tag">ERP Systems</span>
+            <span class="tag">SaaS Platforms</span>
+            <span class="tag">API Development</span>
+            <span class="tag">Automation</span>
+            <span class="tag">Integrations</span>
+          </div>
+        </div>
+        <div class="service-full-card reveal">
+          <div class="service-full-header">
+            <div class="service-full-icon">📱</div>
+            <div>
+              <div class="service-full-title">Mobile Applications</div>
+              <div class="service-full-tag">iOS & Android</div>
+            </div>
+          </div>
+          <p class="service-full-desc">iOS and Android apps built for scale and performance. Native and cross-platform
+            development using React Native and Flutter, with intuitive UX that users actually enjoy. From MVP to
+            production in record time.</p>
+          <div class="service-features-tags">
+            <span class="tag">React Native</span>
+            <span class="tag">Flutter</span>
+            <span class="tag">App Store Launch</span>
+            <span class="tag">Push Notifications</span>
+            <span class="tag">Analytics</span>
+          </div>
+        </div>
+        <div class="service-full-card reveal reveal-delay-1">
+          <div class="service-full-header">
+            <div class="service-full-icon">🔐</div>
+            <div>
+              <div class="service-full-title">Cyber Security</div>
+              <div class="service-full-tag">Protection & Compliance</div>
+            </div>
+          </div>
+          <p class="service-full-desc">Penetration testing, vulnerability assessments, and 24/7 security monitoring. We
+            help you stay compliant with ISO 27001, SOC 2, and GDPR while keeping your digital assets safe in an
+            ever-evolving threat landscape.</p>
+          <div class="service-features-tags">
+            <span class="tag">Pen Testing</span>
+            <span class="tag">VAPT</span>
+            <span class="tag">SOC 2</span>
+            <span class="tag">GDPR Compliance</span>
+            <span class="tag">24/7 Monitoring</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRICING -->
+      <div class="pricing-section">
+        <div style="text-align:center;">
+          <div class="section-tag">Cloud Plans</div>
+          <h2 class="section-title">Scale Without Limits</h2>
+          <p class="section-sub" style="margin:1rem auto 0;text-align:center;">Flexible cloud storage and compute plans
+            for every stage of your business.</p>
+        </div>
+        <div class="pricing-cards">
+          <div class="pricing-card reveal">
+            <div class="pricing-tier">Starter</div>
+            <div class="pricing-name">Launchpad</div>
+            <div class="pricing-price">
+              <span class="price-currency">₹</span>
+              <span class="price-amount">999</span>
+              <span class="price-period">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li>100 GB Secure Storage</li>
+              <li>5 Websites Hosted</li>
+              <li>Email Marketing (5K/mo)</li>
+              <li>Basic Analytics</li>
+              <li>SSL Certificates</li>
+              <li>Business Email</li>
+            </ul>
+            <button onclick="showPage('contact')" class="btn-secondary" style="width:100%;justify-content:center;">Get
+              Started</button>
+          </div>
+          <div class="pricing-card featured reveal reveal-delay-1">
+            <div class="popular-badge">⭐ Most Popular</div>
+            <div class="pricing-tier">Professional</div>
+            <div class="pricing-name">ProScale</div>
+            <div class="pricing-price">
+              <span class="price-currency" style="color:rgba(255,255,255,0.5);">₹</span>
+              <span class="price-amount">3,499</span>
+              <span class="price-period">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li>1 TB Cloud Storage</li>
+              <li>Unlimited Websites</li>
+              <li>Email Marketing (50K/mo)</li>
+              <li>Advanced Analytics + AI</li>
+              <li>CDN & Load Balancing</li>
+              <li>Priority 24/7 Support</li>
+            </ul>
+            <button onclick="showPage('contact')" class="btn-accent" style="width:100%;justify-content:center;">Start
+              Free Trial</button>
+          </div>
+          <div class="pricing-card reveal reveal-delay-2">
+            <div class="pricing-tier">Enterprise</div>
+            <div class="pricing-name">InfraMax</div>
+            <div class="pricing-price">
+              <span class="price-amount" style="font-size:2rem;">Custom</span>
+            </div>
+            <ul class="pricing-features">
+              <li>Unlimited Storage</li>
+              <li>Dedicated Infra</li>
+              <li>White-label Options</li>
+              <li>SLA 99.99% Uptime</li>
+              <li>Dedicated Account Mgr</li>
+              <li>On-premise Integration</li>
+            </ul>
+            <button onclick="showPage('contact')" class="btn-secondary"
+              style="width:100%;justify-content:center;">Contact Sales</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 InfraVex Technologies. All rights reserved.</p>
+        <div style="display:flex;gap:1rem;">
+          <button onclick="showPage('home')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">Home</button>
+          <button onclick="showPage('about')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">About</button>
+          <button onclick="showPage('contact')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">Contact</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+     ABOUT PAGE
+══════════════════════════════════════════ -->
+  <div id="page-about" class="page">
+    <div class="page-hero">
+      <div class="section-tag">About InfraVex</div>
+      <h1 class="section-title">Built by Builders,<br><em style="font-style:italic;color:var(--accent);">for
+          Builders</em></h1>
+      <p class="section-sub">We are a team of engineers, designers, and growth strategists on a mission to make
+        world-class digital infrastructure accessible to every business.</p>
+    </div>
+
+    <!-- MISSION -->
+    <div class="about-mission">
+      <div class="about-mission-grid">
+        <div class="reveal">
+          <div class="section-tag">Our Mission</div>
+          <h2 class="section-title">Infrastructure That<br>Grows With You</h2>
+          <p class="section-sub">Founded in 2017, InfraVex was born from a simple frustration: great digital
+            infrastructure was only accessible to companies with deep pockets and big teams. We changed that.</p>
+          <p style="color:var(--muted);font-size:0.9rem;line-height:1.8;margin-top:1rem;">Today, we serve 500+
+            businesses across 40+ countries, from scrappy early-stage startups to established enterprises, helping them
+            build, scale, and protect their digital presence with confidence.</p>
+          <div class="mission-stats">
+            <div class="mission-stat"><span class="mission-stat-num">500+</span><span class="mission-stat-label">Clients
+                Served</span></div>
+            <div class="mission-stat"><span class="mission-stat-num">40+</span><span
+                class="mission-stat-label">Countries</span></div>
+            <div class="mission-stat"><span class="mission-stat-num">8+</span><span class="mission-stat-label">Years
+                Active</span></div>
+            <div class="mission-stat"><span class="mission-stat-num">99.9%</span><span class="mission-stat-label">Avg
+                Uptime</span></div>
+          </div>
+        </div>
+        <div class="timeline-visual reveal reveal-delay-1">
+          <div class="about-big-card">
+            <div class="about-card-img">🏗️</div>
+            <div class="about-card-body">
+              <h3>Our Story</h3>
+              <p>Started in a small office in Mumbai in 2017, InfraVex began as a web development studio. Over the next
+                8 years, we expanded into cloud infrastructure, digital marketing, and cybersecurity — building one of
+                India's most comprehensive digital service platforms.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALUES -->
+    <div class="values-section">
+      <div style="text-align:center;">
+        <div class="section-tag">Our Values</div>
+        <h2 class="section-title">What We Stand For</h2>
+      </div>
+      <div class="values-grid">
+        <div class="value-card reveal">
+          <span class="value-emoji">🎯</span>
+          <div class="value-name">Outcome-Driven</div>
+          <p class="value-desc">We measure success by your results, not our deliverables. Every decision is tied back to
+            your goals.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-1">
+          <span class="value-emoji">🔍</span>
+          <div class="value-name">Radical Transparency</div>
+          <p class="value-desc">No hidden agendas, no surprise invoices. You get full visibility into everything we do
+            and why we do it.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-2">
+          <span class="value-emoji">⚡</span>
+          <div class="value-name">Relentless Speed</div>
+          <p class="value-desc">We move fast without breaking things. Agile processes and clear communication keep every
+            project on track.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-3">
+          <span class="value-emoji">🤝</span>
+          <div class="value-name">True Partnership</div>
+          <p class="value-desc">We're not just a vendor — we're a long-term partner invested in your growth and success
+            at every stage.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="team-section">
+      <div style="text-align:center;margin-bottom:3.5rem;">
+        <div class="section-tag">The Team</div>
+        <h2 class="section-title">The People Behind InfraVex</h2>
+      </div>
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <div class="team-avatar-wrap">👨‍💻</div>
+          <div class="team-info">
+            <div class="team-name">Vikram Nair</div>
+            <div class="team-role">CEO & Co-Founder</div>
+            <div class="team-bio">Full-stack engineer turned entrepreneur. 12+ years in tech. Formerly at Infosys and a
+              Series B SaaS startup.</div>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-delay-1">
+          <div class="team-avatar-wrap">👩‍🎨</div>
+          <div class="team-info">
+            <div class="team-name">Ananya Desai</div>
+            <div class="team-role">Chief Design Officer</div>
+            <div class="team-bio">Award-winning product designer. Obsessed with systems thinking and making complex
+              software feel simple.</div>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-delay-2">
+          <div class="team-avatar-wrap">👨‍☁️</div>
+          <div class="team-info">
+            <div class="team-name">Rohan Mehta</div>
+            <div class="team-role">Head of Cloud & DevOps</div>
+            <div class="team-bio">AWS Certified Solutions Architect. Built infrastructure for platforms serving 10M+
+              users.</div>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-delay-3">
+          <div class="team-avatar-wrap">👩‍📊</div>
+          <div class="team-info">
+            <div class="team-name">Sneha Kapoor</div>
+            <div class="team-role">VP of Growth</div>
+            <div class="team-bio">Performance marketing expert. Managed ₹50Cr+ in ad spend across D2C, B2B SaaS, and
+              fintech verticals.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:3rem;">
+        <p style="color:var(--muted);margin-bottom:1rem;font-size:0.9rem;">Want to join us? We're always looking for
+          exceptional talent.</p>
+        <button onclick="showPage('contact')" class="btn-primary">View Open Roles →</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 InfraVex Technologies. All rights reserved.</p>
+        <div style="display:flex;gap:1rem;">
+          <button onclick="showPage('home')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">Home</button>
+          <button onclick="showPage('services')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">Services</button>
+          <button onclick="showPage('contact')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">Contact</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+     CONTACT PAGE
+══════════════════════════════════════════ -->
+  <div id="page-contact" class="page">
+    <div class="page-hero">
+      <div class="section-tag">Get In Touch</div>
+      <h1 class="section-title">Let's Build Something<br><em
+          style="font-style:italic;color:var(--accent);">Extraordinary</em></h1>
+      <p class="section-sub">Whether you need a discovery call, a custom proposal, or just have questions — our team is
+        ready. Typically responds within 2 hours.</p>
+    </div>
+
+    <div class="contact-layout">
+      <div class="contact-info-block reveal">
+        <h2>We'd love to<br>hear from you</h2>
+        <p>Reach out through any of the channels below, or fill in the form and we'll get back to you within 2 business
+          hours.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+              <div class="contact-item-title">Email Us</div>
+              <div class="contact-item-sub">hello@infravex.in</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div class="contact-item-title">Call Us</div>
+              <div class="contact-item-sub">+91-XXXXXXXXXX (Mon–Sat, 9am–7pm)</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-item-title">Visit Us</div>
+              <div class="contact-item-sub">Mumbai, Maharashtra, India 400001</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">💬</div>
+            <div>
+              <div class="contact-item-title">Live Chat</div>
+              <div class="contact-item-sub">Available 24/7 via dashboard</div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="background:rgba(27,79,216,0.05);border:1px solid rgba(27,79,216,0.12);border-radius:var(--radius);padding:1.25rem;">
+          <div style="font-weight:700;font-size:0.85rem;color:var(--ink);margin-bottom:4px;">⚡ Average response time: 2
+            hours</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Our team is available Mon–Sat 9am–7pm IST. Enterprise
+            clients get 24/7 priority support.</div>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap reveal reveal-delay-1">
+        <div class="form-title">Send us a Message</div>
+        <p class="form-sub">Fill out the form below and a specialist will reach out within 2 business hours.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" placeholder="Rahul">
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" placeholder="Khanna">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" placeholder="you@company.com">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+91 XXXXX XXXXX">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" placeholder="Your Company Pvt. Ltd.">
+        </div>
+        <div class="form-group">
+          <label>Service of Interest *</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>Digital Marketing</option>
+            <option>Web Solutions</option>
+            <option>Cloud Storage / Infrastructure</option>
+            <option>Software Development</option>
+            <option>Mobile Applications</option>
+            <option>Cyber Security</option>
+            <option>Multiple Services</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estimated Budget</label>
+          <select>
+            <option value="">Select budget range...</option>
+            <option>Under ₹50,000</option>
+            <option>₹50,000 – ₹2,00,000</option>
+            <option>₹2,00,000 – ₹10,00,000</option>
+            <option>₹10,00,000+</option>
+            <option>Let's discuss</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tell us about your project *</label>
+          <textarea
+            placeholder="Describe your goals, challenges, and what you're looking to achieve with InfraVex..."></textarea>
+        </div>
+        <button class="btn-primary form-submit" onclick="handleFormSubmit(this)">Send Message →</button>
+        <p class="form-note">🔒 Your information is secure and will never be shared with third parties.</p>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-section">
+      <div class="map-placeholder">
+        <span>🗺️</span>
+        <div class="map-info">
+          <div>
+            <div class="map-detail-title">Headquarters</div>
+            <div class="map-detail-val">Mumbai, Maharashtra</div>
+          </div>
+          <div>
+            <div class="map-detail-title">Timezone</div>
+            <div class="map-detail-val">IST (UTC +5:30)</div>
+          </div>
+          <div>
+            <div class="map-detail-title">Working Hours</div>
+            <div class="map-detail-val">Mon–Sat, 9am–7pm</div>
+          </div>
+          <div>
+            <div class="map-detail-title">Global Clients</div>
+            <div class="map-detail-val">40+ Countries</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 InfraVex Technologies. All rights reserved.</p>
+        <div style="display:flex;gap:1rem;">
+          <button onclick="showPage('home')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">Home</button>
+          <button onclick="showPage('services')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">Services</button>
+          <button onclick="showPage('about')"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.8rem;font-family:var(--font-body);">About</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ── SCRIPTS ── -->
+  <script src="script.js"></script>
+</body>
+
+</html>

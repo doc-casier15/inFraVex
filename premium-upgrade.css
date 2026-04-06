@@ -1,0 +1,745 @@
+/* ═══════════════════════════════════════════
+   INFRAVEX PREMIUM CSS UPGRADE
+   Layered on top of existing styles
+   ═══════════════════════════════════════════ */
+
+/* ── ENHANCED COLOR PALETTE ── */
+:root {
+  --glow-blue: rgba(27, 79, 216, 0.35);
+  --glow-gold: rgba(232, 184, 75, 0.3);
+  --glow-soft: rgba(27, 79, 216, 0.08);
+  --gradient-hero: linear-gradient(135deg, rgba(27,79,216,0.04) 0%, transparent 40%, rgba(232,184,75,0.03) 100%);
+  --glass-bg: rgba(255,255,255,0.6);
+  --glass-border: rgba(255,255,255,0.18);
+  --noise-opacity: 0.015;
+}
+body.dark {
+  --glass-bg: rgba(28,28,28,0.6);
+  --glass-border: rgba(255,255,255,0.06);
+}
+
+/* ── NOISE TEXTURE OVERLAY (adds depth) ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+}
+
+/* ══════════════════════════════════
+   NAVIGATION UPGRADE
+   ══════════════════════════════════ */
+nav {
+  border-bottom: 1px solid rgba(0,0,0,0.04) !important;
+}
+nav.scrolled {
+  border-bottom-color: rgba(0,0,0,0.06) !important;
+}
+body.dark nav {
+  border-bottom-color: rgba(255,255,255,0.04) !important;
+}
+.nav-cta {
+  background: linear-gradient(135deg, #0D0D0D 0%, #1a1a2e 100%) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+}
+.nav-cta:hover {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%) !important;
+  box-shadow: 0 4px 20px var(--glow-blue) !important;
+}
+
+/* ══════════════════════════════════
+   HERO SECTION UPGRADE
+   ══════════════════════════════════ */
+#hero {
+  background: var(--gradient-hero);
+}
+#hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, transparent, var(--bg));
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Animated gradient orb */
+.hero-bg-gradient {
+  background: radial-gradient(ellipse at center,
+    rgba(27,79,216,0.1) 0%,
+    rgba(27,79,216,0.04) 30%,
+    transparent 70%) !important;
+  animation: orbFloat 12s ease-in-out infinite;
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+/* Hero badge upgrade */
+.hero-badge {
+  background: linear-gradient(135deg, rgba(27,79,216,0.08), rgba(232,184,75,0.05)) !important;
+  border: 1px solid rgba(27,79,216,0.15) !important;
+  box-shadow: 0 2px 12px rgba(27,79,216,0.06), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* Hero card glassmorphism */
+.hero-card-main {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.08),
+    0 24px 80px rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.3) !important;
+}
+.hero-card-main::before {
+  background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent)) !important;
+  background-size: 200% 100% !important;
+  animation: shimmerBar 3s ease-in-out infinite !important;
+}
+@keyframes shimmerBar {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Metric box glow */
+.metric-box {
+  background: rgba(244,243,239,0.7) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.35s var(--ease) !important;
+}
+body.dark .metric-box {
+  background: rgba(22,22,22,0.7) !important;
+}
+.metric-box:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 4px 16px var(--glow-soft), 0 0 0 1px rgba(27,79,216,0.08) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Floating cards upgrade */
+.float-card {
+  background: rgba(255,255,255,0.9) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.1),
+    0 0 0 1px rgba(255,255,255,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.5) !important;
+}
+body.dark .float-card {
+  background: rgba(28,28,28,0.9) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05) !important;
+}
+
+/* ══════════════════════════════════
+   MARQUEE UPGRADE
+   ══════════════════════════════════ */
+.marquee-wrap {
+  background: linear-gradient(135deg, var(--surface), rgba(27,79,216,0.02)) !important;
+  border-top: 1px solid rgba(27,79,216,0.06) !important;
+  border-bottom: 1px solid rgba(27,79,216,0.06) !important;
+}
+.marquee-item .sep {
+  background: linear-gradient(135deg, var(--accent), var(--accent3)) !important;
+  box-shadow: 0 0 6px var(--glow-soft);
+}
+
+/* ══════════════════════════════════
+   SERVICE CARDS UPGRADE
+   ══════════════════════════════════ */
+.service-card-home {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.service-card-home::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+.service-card-home:hover::before {
+  transform: scaleX(1);
+}
+.service-card-home:hover {
+  border-color: rgba(27,79,216,0.2) !important;
+  box-shadow:
+    0 12px 40px rgba(27,79,216,0.08),
+    0 4px 16px rgba(0,0,0,0.04),
+    0 0 0 1px rgba(27,79,216,0.06) !important;
+  transform: translateY(-8px) !important;
+}
+.service-icon-wrap {
+  transition: all 0.4s var(--ease) !important;
+}
+.service-card-home:hover .service-icon-wrap {
+  background: linear-gradient(135deg, rgba(27,79,216,0.1), rgba(232,184,75,0.06)) !important;
+  border-color: rgba(27,79,216,0.2) !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px var(--glow-soft);
+}
+
+/* ══════════════════════════════════
+   WHY-US SECTION UPGRADE
+   ══════════════════════════════════ */
+#why-us {
+  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%) !important;
+}
+.why-main-card {
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.1),
+    0 0 0 1px rgba(0,0,0,0.03) !important;
+}
+.why-card-header {
+  background: linear-gradient(135deg, #0D0D0D 0%, #1a1a2e 60%, #0f1729 100%) !important;
+}
+.perf-bar-fill {
+  background: linear-gradient(90deg, var(--accent), #4a9eff, var(--accent3)) !important;
+  background-size: 200% 100%;
+  animation: barShimmer 3s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--glow-soft);
+}
+@keyframes barShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.why-float-stat {
+  background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+  box-shadow: 0 8px 24px var(--glow-blue), 0 0 0 1px rgba(27,79,216,0.3) !important;
+}
+.feature-item {
+  border: 1px solid var(--border);
+  transition: all 0.35s var(--ease) !important;
+  position: relative;
+  overflow: hidden;
+}
+.feature-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent3));
+  transform: scaleY(0);
+  transition: transform 0.4s var(--ease);
+}
+.feature-item:hover::before { transform: scaleY(1); }
+.feature-item:hover {
+  border-color: rgba(27,79,216,0.18) !important;
+  background: rgba(27,79,216,0.02);
+  box-shadow: 0 4px 16px var(--glow-soft) !important;
+  transform: translateX(4px);
+}
+.feature-check {
+  background: linear-gradient(135deg, rgba(27,79,216,0.12), rgba(27,79,216,0.06)) !important;
+  box-shadow: 0 0 0 3px rgba(27,79,216,0.04);
+}
+
+/* ══════════════════════════════════
+   PROCESS STEPS UPGRADE
+   ══════════════════════════════════ */
+.step-num {
+  background: var(--surface) !important;
+  border: 2px solid var(--border) !important;
+  transition: all 0.5s var(--ease) !important;
+}
+.step:hover .step-num {
+  background: linear-gradient(135deg, rgba(27,79,216,0.08), rgba(232,184,75,0.06)) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  box-shadow:
+    0 0 0 6px rgba(27,79,216,0.06),
+    0 4px 16px var(--glow-soft),
+    0 0 20px rgba(27,79,216,0.1) !important;
+  transform: scale(1.08);
+}
+
+/* ══════════════════════════════════
+   TESTIMONIALS UPGRADE
+   ══════════════════════════════════ */
+#testimonials-home {
+  background: linear-gradient(180deg, var(--bg2), var(--bg)) !important;
+}
+.testimonial {
+  position: relative !important;
+  overflow: hidden !important;
+}
+.testimonial::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent3));
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.testimonial:hover::before { opacity: 1; }
+.testimonial:hover {
+  box-shadow:
+    0 16px 48px rgba(0,0,0,0.06),
+    0 4px 16px rgba(27,79,216,0.04),
+    0 0 0 1px rgba(27,79,216,0.06) !important;
+  transform: translateY(-6px) !important;
+}
+.quote-mark {
+  background: linear-gradient(135deg, rgba(27,79,216,0.15), rgba(232,184,75,0.1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.testimonial-stars {
+  letter-spacing: 3px !important;
+  text-shadow: 0 0 8px var(--glow-gold);
+}
+.author-avatar {
+  box-shadow: 0 2px 8px var(--glow-blue);
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* ══════════════════════════════════
+   FAQ SECTION UPGRADE
+   ══════════════════════════════════ */
+.faq-item {
+  background: var(--surface) !important;
+  transition: all 0.35s var(--ease) !important;
+}
+.faq-item:hover {
+  border-color: rgba(27,79,216,0.15) !important;
+  box-shadow: 0 4px 16px var(--glow-soft);
+}
+.faq-item.active {
+  border-color: rgba(27,79,216,0.2) !important;
+  box-shadow: 0 4px 20px rgba(27,79,216,0.06), 0 0 0 1px rgba(27,79,216,0.05) !important;
+  background: linear-gradient(135deg, var(--surface), rgba(27,79,216,0.02)) !important;
+}
+.faq-icon {
+  transition: all 0.4s var(--ease) !important;
+}
+.faq-item.active .faq-icon {
+  background: linear-gradient(135deg, rgba(27,79,216,0.12), rgba(232,184,75,0.06)) !important;
+  box-shadow: 0 0 0 3px rgba(27,79,216,0.06);
+}
+
+/* ══════════════════════════════════
+   STATS BAR UPGRADE
+   ══════════════════════════════════ */
+.stats-bar {
+  background: linear-gradient(135deg, #0D0D0D, #1a1a2e, #0D0D0D) !important;
+  position: relative;
+  overflow: hidden;
+}
+.stats-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(27,79,216,0.3), rgba(232,184,75,0.2), transparent);
+}
+.stats-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(27,79,216,0.15), transparent);
+}
+.stat-number {
+  background: linear-gradient(135deg, #fff, rgba(232,184,75,0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none !important;
+}
+.stat-item:not(:last-child)::after {
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.08), transparent) !important;
+}
+
+/* ══════════════════════════════════
+   CTA SECTION UPGRADE
+   ══════════════════════════════════ */
+.cta-box {
+  background: linear-gradient(135deg, #0D0D0D, #1a1a2e, #0f1729) !important;
+  box-shadow:
+    0 24px 80px rgba(0,0,0,0.3),
+    0 0 0 1px rgba(27,79,216,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+.cta-box::before {
+  animation: ctaOrb1 8s ease-in-out infinite !important;
+}
+.cta-box::after {
+  animation: ctaOrb2 10s ease-in-out infinite 2s !important;
+}
+@keyframes ctaOrb1 {
+  0%, 100% { transform: translate(0,0); opacity: 0.4; }
+  50% { transform: translate(30px, 20px); opacity: 0.6; }
+}
+@keyframes ctaOrb2 {
+  0%, 100% { transform: translate(0,0); opacity: 0.15; }
+  50% { transform: translate(-20px, -15px); opacity: 0.25; }
+}
+
+/* ══════════════════════════════════
+   NEWSLETTER UPGRADE
+   ══════════════════════════════════ */
+.newsletter-section {
+  background: linear-gradient(135deg, #0D0D0D, #1a1a2e 50%, #0f1729) !important;
+  position: relative;
+  overflow: hidden;
+}
+.newsletter-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -20%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(27,79,216,0.08), transparent 70%);
+  pointer-events: none;
+}
+.newsletter-form input {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1.5px solid rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.newsletter-form input:focus {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(27,79,216,0.12), 0 4px 16px rgba(27,79,216,0.1) !important;
+}
+.newsletter-form button {
+  background: linear-gradient(135deg, var(--accent3), #f0c555) !important;
+  box-shadow: 0 2px 8px var(--glow-gold);
+}
+.newsletter-form button:hover {
+  box-shadow: 0 4px 20px var(--glow-gold), 0 0 0 1px rgba(232,184,75,0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ══════════════════════════════════
+   PAGE HERO UPGRADE
+   ══════════════════════════════════ */
+.page-hero {
+  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%) !important;
+  position: relative !important;
+}
+.page-hero::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -30%; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 600px;
+  background: radial-gradient(ellipse,
+    rgba(27,79,216,0.06) 0%,
+    rgba(232,184,75,0.02) 40%,
+    transparent 70%) !important;
+  pointer-events: none;
+  animation: heroOrbFloat 10s ease-in-out infinite;
+}
+@keyframes heroOrbFloat {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-48%) scale(1.05); }
+}
+
+/* ══════════════════════════════════
+   SERVICES FULL PAGE UPGRADE
+   ══════════════════════════════════ */
+.service-full-card {
+  transition: all 0.4s var(--ease) !important;
+}
+.service-full-card:hover {
+  box-shadow:
+    0 12px 40px rgba(27,79,216,0.08),
+    0 4px 16px rgba(0,0,0,0.04),
+    0 0 0 1px rgba(27,79,216,0.06) !important;
+  transform: translateY(-6px) !important;
+}
+.service-full-card:hover .service-full-icon {
+  background: linear-gradient(135deg, rgba(27,79,216,0.1), rgba(232,184,75,0.05)) !important;
+  box-shadow: 0 4px 12px var(--glow-soft);
+  transform: scale(1.05);
+}
+.tag {
+  transition: all 0.3s var(--ease) !important;
+}
+.tag:hover {
+  background: linear-gradient(135deg, rgba(27,79,216,0.08), rgba(232,184,75,0.04)) !important;
+  border-color: rgba(27,79,216,0.2) !important;
+  color: var(--accent) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px var(--glow-soft);
+}
+
+/* ══════════════════════════════════
+   PRICING UPGRADE
+   ══════════════════════════════════ */
+.pricing-card {
+  transition: all 0.45s var(--ease) !important;
+}
+.pricing-card:hover {
+  box-shadow:
+    0 16px 48px rgba(0,0,0,0.08),
+    0 4px 16px rgba(27,79,216,0.06),
+    0 0 0 1px rgba(27,79,216,0.06) !important;
+  transform: translateY(-8px) !important;
+}
+.pricing-card.featured {
+  box-shadow: 0 8px 32px var(--glow-blue) !important;
+}
+.pricing-card.featured:hover {
+  box-shadow: 0 20px 60px var(--glow-blue), 0 0 0 1px rgba(27,79,216,0.2) !important;
+  transform: translateY(-10px) scale(1.02) !important;
+}
+
+/* ══════════════════════════════════
+   ABOUT PAGE UPGRADE
+   ══════════════════════════════════ */
+.about-card-img {
+  background: linear-gradient(135deg, var(--accent) 0%, #0F3BA8 30%, #1a1a2e 60%, var(--accent3) 100%) !important;
+  position: relative;
+}
+.about-card-img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(232,184,75,0.15));
+  pointer-events: none;
+}
+.mission-stat {
+  transition: all 0.35s var(--ease) !important;
+  position: relative;
+  overflow: hidden;
+}
+.mission-stat::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  transform: scaleX(0);
+  transition: transform 0.4s var(--ease);
+}
+.mission-stat:hover::before { transform: scaleX(1); }
+.mission-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px var(--glow-soft) !important;
+}
+.mission-stat-num {
+  background: linear-gradient(135deg, var(--accent), rgba(27,79,216,0.7));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Value cards */
+.value-card {
+  transition: all 0.4s var(--ease) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.value-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease);
+}
+.value-card:hover::before { transform: scaleX(1); }
+.value-card:hover {
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.06),
+    0 0 0 1px rgba(27,79,216,0.06) !important;
+  transform: translateY(-8px) !important;
+}
+.value-emoji {
+  transition: transform 0.4s var(--ease);
+}
+.value-card:hover .value-emoji {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+/* Team cards */
+.team-card {
+  transition: all 0.4s var(--ease) !important;
+}
+.team-card:hover {
+  box-shadow:
+    0 16px 48px rgba(0,0,0,0.08),
+    0 0 0 1px rgba(27,79,216,0.06) !important;
+  transform: translateY(-8px) !important;
+}
+.team-card:hover .team-avatar-wrap {
+  filter: saturate(1.2) brightness(1.05);
+}
+
+/* ══════════════════════════════════
+   CONTACT PAGE UPGRADE
+   ══════════════════════════════════ */
+.contact-form-wrap {
+  background: var(--surface) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.06),
+    0 24px 80px rgba(0,0,0,0.03),
+    0 0 0 1px rgba(0,0,0,0.03) !important;
+}
+.contact-item {
+  transition: all 0.35s var(--ease) !important;
+}
+.contact-item:hover {
+  border-color: rgba(27,79,216,0.18) !important;
+  box-shadow: 0 4px 16px var(--glow-soft) !important;
+  transform: translateX(4px);
+}
+.contact-item:hover .contact-icon {
+  background: linear-gradient(135deg, rgba(27,79,216,0.14), rgba(27,79,216,0.06)) !important;
+  box-shadow: 0 0 0 3px rgba(27,79,216,0.06);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  transition: all 0.3s var(--ease) !important;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 4px 16px rgba(27,79,216,0.06), 0 0 0 3px rgba(27,79,216,0.06) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Map section */
+.map-placeholder {
+  background: linear-gradient(135deg, var(--bg2), rgba(27,79,216,0.03)) !important;
+  transition: all 0.35s var(--ease);
+}
+.map-placeholder:hover {
+  box-shadow: 0 4px 20px var(--glow-soft);
+}
+
+/* ══════════════════════════════════
+   FOOTER UPGRADE
+   ══════════════════════════════════ */
+footer {
+  position: relative;
+}
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 5%; right: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent3), transparent) !important;
+  opacity: 0.15;
+}
+.social-link {
+  transition: all 0.3s var(--ease) !important;
+}
+.social-link:hover {
+  background: rgba(27,79,216,0.06) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px var(--glow-soft) !important;
+}
+
+/* ══════════════════════════════════
+   BUTTONS GLOBAL UPGRADE
+   ══════════════════════════════════ */
+.btn-primary {
+  background: linear-gradient(135deg, #0D0D0D, #1a1a2e) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+  box-shadow: 0 8px 28px var(--glow-blue) !important;
+  transform: translateY(-3px) !important;
+}
+body.dark .btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+}
+body.dark .btn-primary:hover {
+  background: linear-gradient(135deg, #4a9eff, var(--accent)) !important;
+  box-shadow: 0 8px 32px var(--glow-blue) !important;
+}
+.btn-secondary {
+  transition: all 0.35s var(--ease) !important;
+}
+.btn-secondary:hover {
+  box-shadow: 0 4px 16px var(--glow-soft) !important;
+  transform: translateY(-3px) !important;
+}
+.btn-accent:hover {
+  box-shadow: 0 8px 28px var(--glow-blue) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* ══════════════════════════════════
+   BACK TO TOP UPGRADE
+   ══════════════════════════════════ */
+.back-to-top {
+  background: linear-gradient(135deg, #0D0D0D, #1a1a2e) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
+}
+.back-to-top:hover {
+  background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+  box-shadow: 0 8px 32px var(--glow-blue) !important;
+  transform: translateY(-4px) scale(1.1) !important;
+}
+
+/* ══════════════════════════════════
+   CHAT WIDGET UPGRADE
+   ══════════════════════════════════ */
+.chat-btn {
+  background: linear-gradient(135deg, var(--accent), #4a9eff, var(--accent2)) !important;
+  background-size: 200% 200% !important;
+  animation: chatGradient 4s ease-in-out infinite !important;
+  box-shadow: 0 4px 20px var(--glow-blue) !important;
+}
+@keyframes chatGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.chat-btn:hover {
+  box-shadow: 0 8px 36px var(--glow-blue) !important;
+}
+
+/* ══════════════════════════════════
+   SCROLL PROGRESS UPGRADE
+   ══════════════════════════════════ */
+#scrollProgress {
+  background: linear-gradient(90deg, var(--accent), #4a9eff, var(--accent3)) !important;
+  box-shadow: 0 0 8px var(--glow-blue);
+}
+
+/* ══════════════════════════════════
+   PRELOADER UPGRADE
+   ══════════════════════════════════ */
+#preloader {
+  background: linear-gradient(135deg, #050505, #0D0D0D, #0a0a18) !important;
+}
+.preloader-bar-fill {
+  background: linear-gradient(90deg, var(--accent), #4a9eff, var(--accent3)) !important;
+  box-shadow: 0 0 12px var(--glow-blue);
+}
+
+/* ══════════════════════════════════
+   SMOOTH ENTRANCE REFINEMENTS
+   ══════════════════════════════════ */
+.reveal { transition-duration: 0.85s !important; }
+.reveal-left, .reveal-right, .reveal-scale, .reveal-rotate {
+  transition-duration: 0.85s !important;
+}
